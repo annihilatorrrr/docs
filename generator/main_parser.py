@@ -53,7 +53,7 @@ def to_related(related):
         if x["description"]:
             temp += f"<p>{x['description']}</p>"
         temp = markdownify(temp)
-        a += "#### " + temp
+        a += f"#### {temp}"
     return a
 
 
@@ -97,7 +97,7 @@ for method in parsed:
             result = "AnyRequest"
         title: str = method.class_name
         if method.namespace:
-            title = method.namespace + "." + title
+            title = f"{method.namespace}.{title}"
 
         data = template.format(title=title,
                                description=markdownify(description),
@@ -108,5 +108,5 @@ for method in parsed:
                                related=markdownify(to_related(related_pages)),
                                examples=generate_example(b.getvalue(), result)
                                )
-        with open(os.path.join(path, method.class_name + ".md"), "w", encoding="utf-8") as out:
+        with open(os.path.join(path, f"{method.class_name}.md"), "w", encoding="utf-8") as out:
             out.write(data)

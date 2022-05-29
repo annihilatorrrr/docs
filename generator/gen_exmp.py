@@ -19,7 +19,7 @@ def get_type(param_type):
         param_type = re.sub("flags.\d+\?", "", param_type)
     if 'Vector<' in param_type:
         param_type = re.sub("Vector<(.*)>", "\g<1>", param_type)
-        return "[" + get_type(param_type) + "]"
+        return f"[{get_type(param_type)}]"
     if param_type in ('int', 'long', 'int128', 'int256', 'double', 'date'):
         return str(randint(1, 10000000))
     elif param_type in ('true', 'bool'):
@@ -30,7 +30,7 @@ def get_type(param_type):
         return "Buffer.from('some bytes here')"
     else:
         # custom class
-        return "new Api." + param_type + "({...})"
+        return f"new Api.{param_type}" + "({...})"
 
 
 def generate_example(example, result):
@@ -76,9 +76,6 @@ const client = new TelegramClient(session, apiId, apiHash, {});
 
     data = example
     js_example = template_js.replace("0", data)
-    if " " in result:
-        result = ""
-    else:
-        result = ": Api." + result
+    result = "" if " " in result else f": Api.{result}"
     ts_example = template_ts.replace("1", result).replace("0", data)
     return template_example.format(js=js_example, ts=ts_example)

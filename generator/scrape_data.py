@@ -62,9 +62,7 @@ def scape_page(url):
                 "errors_description": fix(str(row_description)),
             })
     can_bots_user = soup.find(id="bots-can-use-this-method")
-    can_use = "no"
-    if can_bots_user:
-        can_use = "yes"
+    can_use = "yes" if can_bots_user else "no"
     related_pages = content.find(id="related-pages")
     related = []
     while related_pages:
